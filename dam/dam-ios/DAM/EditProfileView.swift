@@ -14,7 +14,7 @@ struct EditProfileView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                Text("Édition du profil")
+                Text("EDIT PROFIL")
                     .font(.title)
                     .fontWeight(.semibold)
                     .foregroundColor(.primary)
@@ -22,7 +22,7 @@ struct EditProfileView: View {
                 
                 VStack(spacing: 15) {
                     // Nom
-                    TextField("Nom", text: $name)
+                    TextField("Name", text: $name)
                         .padding()
                         .background(RoundedRectangle(cornerRadius: 10).strokeBorder(Color.gray, lineWidth: 1))
                         .padding(.horizontal)
@@ -36,19 +36,19 @@ struct EditProfileView: View {
                         .onAppear { email = user.email ?? "" }
                     
                     // Téléphone
-                    TextField("Téléphone", text: $phone)
+                    TextField("Phone Number", text: $phone)
                         .padding()
                         .background(RoundedRectangle(cornerRadius: 10).strokeBorder(Color.gray, lineWidth: 1))
                         .padding(.horizontal)
                         .onAppear { phone = user.phone ?? "" }
                     
                     // Mot de passe
-                    SecureField("Nouveau mot de passe", text: $password)
+                    SecureField("New password", text: $password)
                         .padding()
                         .background(RoundedRectangle(cornerRadius: 10).strokeBorder(Color.gray, lineWidth: 1))
                         .padding(.horizontal)
                     
-                    SecureField("Confirmer le mot de passe", text: $confirmPassword)
+                    SecureField("Confirm new password", text: $confirmPassword)
                         .padding()
                         .background(RoundedRectangle(cornerRadius: 10).strokeBorder(Color.gray, lineWidth: 1))
                         .padding(.horizontal)
@@ -69,7 +69,7 @@ struct EditProfileView: View {
                                     .progressViewStyle(CircularProgressViewStyle())
                                     .frame(width: 20, height: 20)
                             } else {
-                                Text("Sauvegarder")
+                                Text("Save")
                                     .fontWeight(.bold)
                                     .foregroundColor(.white)
                                     .padding()
@@ -87,7 +87,7 @@ struct EditProfileView: View {
             .padding(.bottom)
         }
         .background(Color(UIColor.systemBackground))
-        .navigationTitle("Modifier le profil")
+        //.navigationTitle("Modifier le profil")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             name = user.name ?? ""

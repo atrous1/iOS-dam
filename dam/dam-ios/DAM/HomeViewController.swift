@@ -18,16 +18,7 @@ class HomeViewController: UITabBarController {
         // Ajouter le UIHostingController en tant qu’enfant
         addChild(customTabBarView)
         view.addSubview(customTabBarView.view)
-        /*
-        // Configurer les contraintes pour afficher customTabBarView correctement
-        customTabBarView.view.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            customTabBarView.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            customTabBarView.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            customTabBarView.view.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            customTabBarView.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
-        ])
-         */
+       
         // Informer que le controller a été ajouté
         customTabBarView.didMove(toParent: self)
         print("UIHostingController ajouté comme enfant")

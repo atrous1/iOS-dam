@@ -22,15 +22,11 @@ struct CustomTabBarView: View {
                     Text("Add")
                 }
             
-           // use a Navigation view for theHistorique tab
-          
-           NavigationView {
-               HistoryView()
-             
-           }
-            
+            // Navigation view for the Historique tab
+            NavigationView {
+                HistoryListView()
+            }
             .tabItem {
-        
                 Image(systemName: "clock")
                 Text("History")
             }
@@ -84,11 +80,12 @@ struct ProfileControllerView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(Color.blue)
+                .background(Color.green)
                 
                 VStack(alignment: .center, spacing: 10) {
                     ProfileDetailRow(icon: "envelope", text: profile.email ?? "Email non disponible")
                     ProfileDetailRow(icon: "phone", text: profile.phone ?? "Téléphone non disponible")
+                   
                 }
                 .frame(maxWidth: .infinity)
                 .padding()
@@ -105,7 +102,7 @@ struct ProfileControllerView: View {
                             VStack {
                                 Text("Edit profil")
                                     .fontWeight(.bold)
-                                    .foregroundColor(.blue)
+                                    .foregroundColor(.green)
                                     .padding()
                                     .frame(maxWidth: .infinity)
                             }
@@ -149,7 +146,7 @@ struct ProfileControllerView: View {
                         presentationMode.wrappedValue.dismiss()
                     }) {
                         VStack {
-                            Text("Déconnexion")
+                            Text("LOG OUT")
                                 .fontWeight(.bold)
                                 .foregroundColor(.red)
                                 .padding()
@@ -250,7 +247,7 @@ struct ProfileDetailRow: View {
     var body: some View {
         HStack {
             Image(systemName: icon)
-                .foregroundColor(.blue)
+                .foregroundColor(.green)
                 .frame(width: 24, height: 24)
             Text(text)
                 .foregroundColor(.black)
@@ -283,7 +280,6 @@ class ProductViewModel: ObservableObject {
             } }.resume()
         
     } }
-
 struct ProductListView: View {
     @StateObject private var viewModel = ProductViewModel()
     private let baseURL = "http://172.18.20.186:3001"
@@ -292,11 +288,15 @@ struct ProductListView: View {
         GridItem(.flexible(), spacing: 10),
         GridItem(.flexible(), spacing: 10)
     ]
+   
+    let cardHeight: CGFloat = 230 // Hauteur fixe des cartes
+    let cardWidth: CGFloat = 140   // Largeur fixe des cartes
+    let spacing: CGFloat = 15     // Espacement entre les cartes
 
     var body: some View {
         NavigationView {
             ScrollView {
-                LazyVGrid(columns: columns, spacing: 15) {
+                LazyVGrid(columns: columns, spacing: spacing) {
                     ForEach(viewModel.products.indices, id: \.self) { index in
                         let product = viewModel.products[index]
                         VStack(alignment: .leading, spacing: 10) {
@@ -307,7 +307,7 @@ struct ProductListView: View {
                                 Image(uiImage: uiImage)
                                     .resizable()
                                     .scaledToFit() // Maintenir le ratio d'aspect
-                                    .frame(height: 150) // Limiter la hauteur
+                                    .frame(width: cardWidth, height: 130) // Limiter la hauteur
                                     .clipped()
                             } else if let imageUrl = URL(string: baseURL + product.image) {
                                 // URL relative complétée
@@ -315,7 +315,7 @@ struct ProductListView: View {
                                     image
                                         .resizable()
                                         .scaledToFit() // Maintenir le ratio d'aspect
-                                        .frame(height: 150) // Limiter la hauteur
+                                        .frame(width: cardWidth, height: 130) // Limiter la hauteur
                                         .clipped()
                                 } placeholder: {
                                     ProgressView()
@@ -324,27 +324,31 @@ struct ProductListView: View {
                                 // Placeholder si l'image n'est pas valide
                                 Rectangle()
                                     .fill(Color.gray.opacity(0.3))
-                                    .frame(height: 150)
+                                    .frame(width: cardWidth, height: 130) // Fixer la taille
                                     .overlay(Text("Image indisponible"))
                             }
+                           
                             // Nom du produit
                             Text(product.name)
                                 .font(.headline)
                                 .lineLimit(2)
+                                .frame(width: cardWidth, alignment: .leading)
+                           
                             // Prix
                             Text("Prix : \(product.price, specifier: "%.2f") €")
                                 .font(.body)
                                 .foregroundColor(.green)
+                                .frame(width: cardWidth, alignment: .leading)
                         }
                         .padding()
                         .background(Color.white)
                         .cornerRadius(10)
                         .shadow(radius: 5)
+                        .frame(width: cardWidth, height: cardHeight) // Fixer la taille des cartes
                     }
                 }
-                .padding()
+                .padding(spacing) // Espacement général autour de la grille
             }
-            //.navigationTitle("Produits")
             .onAppear {
                 viewModel.fetchProducts()
             }

@@ -17,13 +17,8 @@
 		1319BAA02CDC0AFF00985AB8 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1319BA9F2CDC0AFF00985AB8 /* LoginViewController.swift */; };
 		1319BAA22CDC170200985AB8 /* SignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1319BAA12CDC170200985AB8 /* SignupViewController.swift */; };
 		1319BAA42CDC17FF00985AB8 /* ResetPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1319BAA32CDC17FF00985AB8 /* ResetPViewController.swift */; };
+		B0100C2D2D0B265000897F16 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0100C2C2D0B265000897F16 /* HistoryView.swift */; };
 		B049050E2CE25294000A9489 /* RecupCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B049050D2CE25294000A9489 /* RecupCodeViewController.swift */; };
-		B0738A492D0894C2008ECE01 /* HistroyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0738A482D0894C2008ECE01 /* HistroyView.swift */; };
-		B07E25B22D09DF96005B8355 /* HistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07E25B12D09DF96005B8355 /* HistoryViewModel.swift */; };
-		B07E25B42D09E049005B8355 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07E25B32D09E049005B8355 /* UserDefaults.swift */; };
-		B07E25B82D09EA1E005B8355 /* Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07E25B72D09EA1E005B8355 /* Manager.swift */; };
-		B07E25BA2D09EA70005B8355 /* HistoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07E25B92D09EA70005B8355 /* HistoryService.swift */; };
-		B07E25BE2D09EB9B005B8355 /* Authservice.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07E25BD2D09EB9B005B8355 /* Authservice.swift */; };
 		B08923DA2D085EC800D55B35 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = B08923D92D085EC800D55B35 /* Product.swift */; };
 		B0AB27382CE351C900F80455 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0AB27372CE351C900F80455 /* HomeViewController.swift */; };
 		B0AB273A2CE3537B00F80455 /* CustomTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0AB27392CE3537B00F80455 /* CustomTabBarView.swift */; };
@@ -51,13 +46,8 @@
 		1319BA9F2CDC0AFF00985AB8 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		1319BAA12CDC170200985AB8 /* SignupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupViewController.swift; sourceTree = "<group>"; };
 		1319BAA32CDC17FF00985AB8 /* ResetPViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPViewController.swift; sourceTree = "<group>"; };
+		B0100C2C2D0B265000897F16 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		B049050D2CE25294000A9489 /* RecupCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecupCodeViewController.swift; path = ../RecupCodeViewController.swift; sourceTree = "<group>"; };
-		B0738A482D0894C2008ECE01 /* HistroyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistroyView.swift; sourceTree = "<group>"; };
-		B07E25B12D09DF96005B8355 /* HistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewModel.swift; sourceTree = "<group>"; };
-		B07E25B32D09E049005B8355 /* UserDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
-		B07E25B72D09EA1E005B8355 /* Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manager.swift; sourceTree = "<group>"; };
-		B07E25B92D09EA70005B8355 /* HistoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryService.swift; sourceTree = "<group>"; };
-		B07E25BD2D09EB9B005B8355 /* Authservice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authservice.swift; sourceTree = "<group>"; };
 		B08923D92D085EC800D55B35 /* Product.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
 		B0AB27372CE351C900F80455 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		B0AB27392CE3537B00F80455 /* CustomTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarView.swift; sourceTree = "<group>"; };
@@ -126,12 +116,7 @@
 				B0D6796E2CF7A2F90019D332 /* VerifLogViewController.swift */,
 				B0D679742CF7BB160019D332 /* EditProfileView.swift */,
 				B0D9E8672CFCF717008274F7 /* HistoryItem.swift */,
-				B07E25BD2D09EB9B005B8355 /* Authservice.swift */,
-				B07E25B32D09E049005B8355 /* UserDefaults.swift */,
-				B0738A482D0894C2008ECE01 /* HistroyView.swift */,
-				B07E25B72D09EA1E005B8355 /* Manager.swift */,
-				B07E25B92D09EA70005B8355 /* HistoryService.swift */,
-				B07E25B12D09DF96005B8355 /* HistoryViewModel.swift */,
+				B0100C2C2D0B265000897F16 /* HistoryView.swift */,
 			);
 			path = DAM;
 			sourceTree = "<group>";
@@ -210,9 +195,9 @@
 				B0CF5B872CDD3C9A00F62740 /* ForgetPSViewController.swift in Sources */,
 				B0D679752CF7BB160019D332 /* EditProfileView.swift in Sources */,
 				1319BAA22CDC170200985AB8 /* SignupViewController.swift in Sources */,
-				B07E25BE2D09EB9B005B8355 /* Authservice.swift in Sources */,
 				B0AB27402CE38F2B00F80455 /* ContentView.swift in Sources */,
 				1319BA8D2CDBBFD200985AB8 /* ViewController.swift in Sources */,
+				B0100C2D2D0B265000897F16 /* HistoryView.swift in Sources */,
 				B0D679712CF7BA850019D332 /* User.swift in Sources */,
 				1319BA892CDBBFD200985AB8 /* AppDelegate.swift in Sources */,
 				B0D6796F2CF7A2F90019D332 /* VerifLogViewController.swift in Sources */,
@@ -220,14 +205,9 @@
 				B0AB27382CE351C900F80455 /* HomeViewController.swift in Sources */,
 				B0AB273C2CE3658400F80455 /* ProfileViewController.swift in Sources */,
 				B0AB273E2CE3886F00F80455 /* ImagePickerViewController.swift in Sources */,
-				B0738A492D0894C2008ECE01 /* HistroyView.swift in Sources */,
-				B07E25BA2D09EA70005B8355 /* HistoryService.swift in Sources */,
-				B07E25B22D09DF96005B8355 /* HistoryViewModel.swift in Sources */,
-				B07E25B42D09E049005B8355 /* UserDefaults.swift in Sources */,
 				B0D9E8682CFCF717008274F7 /* HistoryItem.swift in Sources */,
 				B049050E2CE25294000A9489 /* RecupCodeViewController.swift in Sources */,
 				1319BAA42CDC17FF00985AB8 /* ResetPViewController.swift in Sources */,
-				B07E25B82D09EA1E005B8355 /* Manager.swift in Sources */,
 				1319BAA02CDC0AFF00985AB8 /* LoginViewController.swift in Sources */,
 				B0CA71A32CF87BC20044718E /* VerifSignViewController.swift in Sources */,
 				1319BA8B2CDBBFD200985AB8 /* SceneDelegate.swift in Sources */,

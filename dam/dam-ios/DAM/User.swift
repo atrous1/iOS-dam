@@ -12,6 +12,7 @@ struct User: Identifiable, Codable {
     var email: String
     var phone: String
     var password: String?
+   
 
     // Initialiseur optionnel pour le décodage
     enum CodingKeys: String, CodingKey {
