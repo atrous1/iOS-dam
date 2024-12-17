@@ -258,8 +258,631 @@ struct ProfileDetailRow: View {
         .padding(.vertical, 5)
     }
 }
+/*
+struct PaymentFormView: View {
+    let product: Product
+    @Binding var isPresented: Bool // Pour contrôler l'affichage de la feuille
+    @State private var cardNumber: String = ""
+       @State private var expirationDate: String = ""
+       @State private var cvc: String = ""
+       @State private var country: String = ""
+       @State private var zipCode: String = ""
+    @State private var isLoading = false
+        @State private var showAlert = false
+        @State private var alertMessage = ""
+    
+    let productId = "product_id_example" // Remplace par l'ID du produit
+    @State private var userId: String? // Remplace par l'ID de l'utilisateur
+
+    
+    var body: some View {
+        ZStack {
+            Color.white
+                .ignoresSafeArea()
+            
+            VStack(spacing: 20) {
+                // Bouton pour fermer
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        isPresented = false
+                    }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                            .foregroundColor(.gray)
+                    }
+                    .padding()
+                }
+
+                // Titre
+                Text("Buy \(product.name)")
+                    .font(.largeTitle)
+                                        .fontWeight(.bold)
+                                        .padding(.top, 10)
 
 
+                // Image
+                if let imageData = Data(base64Encoded: product.image),
+                   let uiImage = UIImage(data: imageData) {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height:120)
+                        .cornerRadius(10)
+                } else if let imageUrl = URL(string: "http://172.18.20.186:3001" + product.image) {
+                    AsyncImage(url: imageUrl) { image in
+                        image
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 120)
+                            .cornerRadius(10)
+                    } placeholder: {
+                        ProgressView()
+                    }
+                } else {
+                    Rectangle()
+                        .fill(Color.gray.opacity(0.3))
+                        .frame(height: 120)
+                        .cornerRadius(10)
+                        .overlay(Text("Image indisponible"))
+                }
+
+                // Formulaire de paiement
+                Form {
+                    Section(header: Text("order details")) {
+                        Text("Product: \(product.name)")
+                        Text("Price: \(product.price, specifier: "%.2f") TND")
+                    }
+
+                    Section(header: Text(" Payment information")) {
+                        
+                        TextField("Card Number", text: $cardNumber)
+                                                   .keyboardType(.numberPad)
+                        TextField("Expiration Date (DD/MM)", text: $expirationDate)
+                                                   .keyboardType(.numbersAndPunctuation)
+                                                   .onChange(of: expirationDate) { newValue in
+                                                       expirationDate = formatDateInput(newValue)
+                                                   }
+                       
+                        SecureField("CVC", text: $cvc)
+                                                    .keyboardType(.numberPad)
+                        TextField("Country", text: $country)
+                        TextField("ZIP", text: $zipCode)
+                                                    .keyboardType(.numberPad)
+                    }
+
+                    Button(action: {
+                                           // Récupérer l'ID de l'utilisateur avant de créer la commande
+                                           getUserId { userId, error in
+                                               if let error = error {
+                                                   alertMessage = "Erreur lors de la récupération de l'ID de l'utilisateur: \(error.localizedDescription)"
+                                                   showAlert = true
+                                               } else if let userId = userId {
+                                                   self.userId = userId // Sauvegarde de l'ID utilisateur
+                                                   createOrder(userId: userId) // Appel de la fonction pour créer la commande
+                                               }
+                                           }
+                                       }) {
+                        if isLoading {
+                            ProgressView()
+                        }else {
+                            Text("Pay now")
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.green)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                        }
+                       
+                    }
+                    .disabled(isLoading)
+                }
+                .padding(.horizontal)
+                .alert(isPresented: $showAlert) {
+                            Alert(title: Text("Payment Status"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                        }
+            }
+           
+        }
+     
+    }
+    /// Fonction pour formater l'entrée de la date en "DD/MM"
+        private func formatDateInput(_ input: String) -> String {
+            // Supprime tous les caractères non numériques
+            let digits = input.filter { $0.isNumber }
+            
+            var result = ""
+            
+            // Ajoute les séparateurs `/` au bon endroit
+            for (index, digit) in digits.enumerated() {
+                if index == 2 || index == 4 { // Ajoute un `/` après le jour et le mois
+                    result.append("/")
+                }
+                result.append(digit)
+                
+                // Limite la longueur à 10 caractères (DD/MM/YYYY)
+                if result.count == 10 {
+                    break
+                }
+            }
+            
+            return result
+        }
+    private func createOrder(userid: String) {
+            isLoading = true
+
+            let paymentData = CreatePaymentData(
+                cardNumber: cardNumber,
+                expiryDate: expirationDate,  // Corrected variable name
+                cvc: cvc,
+                country: country,
+                zip: zipCode  // Use 'zipCode' instead of 'zip'
+            )
+
+            let orderService = OrderService()
+            orderService.createOrder(userId: userId, productId: productId, paymentData: paymentData) { result in
+                DispatchQueue.main.async {
+                    isLoading = false
+                    switch result {
+                    case .success(let response):
+                        alertMessage = "Order created successfully: \(response.id)"
+                    case .failure(let error):
+                        alertMessage = "Error: \(error.localizedDescription)"
+                    }
+                    showAlert = true
+                }
+            }
+        }
+    // Fonction pour récupérer l'ID de l'utilisateur via une API
+        private func getUserId(completion: @escaping (String?, Error?) -> Void) {
+            // Remplacez cette partie par un appel réel à votre API pour récupérer l'ID de l'utilisateur
+            let apiUrl = "http://votre-api.com/profile/id"
+            guard let url = URL(string: apiUrl) else { return }
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization") // Ajoutez un token d'authentification si nécessaire
+            
+            }
+            
+            URLSession.shared.dataTask(with: request) { data, response, error in
+                if let error = error {
+                    completion(nil, error)
+                    return
+                }
+                
+                if let data = data, let userId = try? JSONDecoder().decode(UserIdResponse.self, from: data) {
+                    completion(userId.userId, nil)
+                } else {
+                    completion(nil, NSError(domain: "API Error", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to decode response"]))
+                }
+            }.resume()
+        }
+    }
+
+    struct UserIdResponse: Decodable {
+        let userId: String
+    }
+    }
+    */
+
+struct PaymentFormView: View {
+    let product: Product
+    @Binding var isPresented: Bool // Pour contrôler l'affichage de la feuille
+    @State private var cardNumber: String = ""
+    @State private var expirationDate: String = ""
+    @State private var cvc: String = ""
+    @State private var country: String = ""
+    @State private var zipCode: String = ""
+    @State private var isLoading = false
+    @State private var showAlert = false
+    @State private var alertMessage = ""
+    
+    let productId = "product_id_example" // Remplace par l'ID du produit
+    @State private var userId: String? // Remplace par l'ID de l'utilisateur
+
+    var body: some View {
+        ZStack {
+            Color.white
+                .ignoresSafeArea()
+            
+            VStack(spacing: 20) {
+                // Bouton pour fermer
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        isPresented = false
+                    }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                            .foregroundColor(.gray)
+                    }
+                    .padding()
+                }
+
+                // Titre
+                Text("Buy \(product.name)")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .padding(.top, 10)
+
+                // Image du produit
+                if let imageData = Data(base64Encoded: product.image),
+                   let uiImage = UIImage(data: imageData) {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 120)
+                        .cornerRadius(10)
+                } else if let imageUrl = URL(string: "http://172.18.20.186:3001" + product.image) {
+                    AsyncImage(url: imageUrl) { image in
+                        image
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 120)
+                            .cornerRadius(10)
+                    } placeholder: {
+                        ProgressView()
+                    }
+                } else {
+                    Rectangle()
+                        .fill(Color.gray.opacity(0.3))
+                        .frame(height: 120)
+                        .cornerRadius(10)
+                        .overlay(Text("Image indisponible"))
+                }
+
+                // Formulaire de paiement
+                Form {
+                    Section(header: Text("Order details")) {
+                        Text("Product: \(product.name)")
+                        Text("Price: \(product.price, specifier: "%.2f") TND")
+                    }
+
+                    Section(header: Text("Payment information")) {
+                        TextField("Card Number", text: $cardNumber)
+                            .keyboardType(.numberPad)
+                        TextField("Expiration Date (DD/MM)", text: $expirationDate)
+                            .keyboardType(.numbersAndPunctuation)
+                            .onChange(of: expirationDate) { newValue in
+                                expirationDate = formatDateInput(newValue)
+                            }
+                        SecureField("CVC", text: $cvc)
+                            .keyboardType(.numberPad)
+                        TextField("Country", text: $country)
+                        TextField("ZIP", text: $zipCode)
+                            .keyboardType(.numberPad)
+                    }
+
+                    Button(action: {
+                        // Récupérer l'ID de l'utilisateur avant de créer la commande
+                        getUserId { userId, error in
+                            if let error = error {
+                                alertMessage = "Erreur lors de la récupération de l'ID de l'utilisateur: \(error.localizedDescription)"
+                                showAlert = true
+                            } else if let userId = userId {
+                                self.userId = userId // Sauvegarde de l'ID utilisateur
+                                createOrder(userId: userId) // Appel de la fonction pour créer la commande
+                            }
+                        }
+                    }) {
+                        if isLoading {
+                            ProgressView()
+                        } else {
+                            Text("Pay now")
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.green)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                        }
+                    }
+                    .disabled(isLoading)
+                }
+                .padding(.horizontal)
+                .alert(isPresented: $showAlert) {
+                    Alert(title: Text("Payment Status"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                }
+            }
+        }
+    }
+
+    // Fonction pour formater l'entrée de la date en "DD/MM"
+    private func formatDateInput(_ input: String) -> String {
+        // Supprime tous les caractères non numériques
+        let digits = input.filter { $0.isNumber }
+        
+        var result = ""
+        
+        // Ajoute les séparateurs `/` au bon endroit
+        for (index, digit) in digits.enumerated() {
+            if index == 2 || index == 4 { // Ajoute un `/` après le jour et le mois
+                result.append("/")
+            }
+            result.append(digit)
+            
+            // Limite la longueur à 5 caractères (DD/MM)
+            if result.count == 5 {
+                break
+            }
+        }
+        
+        return result
+    }
+
+    // Fonction pour créer la commande
+    private func createOrder(userId: String) {
+        isLoading = true
+
+        let paymentData = CreatePaymentData(
+            cardNumber: cardNumber,
+            expiryDate: expirationDate,
+            cvc: cvc,
+            country: country,
+            zip: zipCode
+        )
+
+        let orderService = OrderService()
+        orderService.createOrder(userId: userId, productId: productId, paymentData: paymentData) { result in
+            DispatchQueue.main.async {
+                isLoading = false
+                switch result {
+                case .success(let response):
+                    alertMessage = "Order created successfully: \(response.id)"
+                case .failure(let error):
+                    alertMessage = "Error: \(error.localizedDescription)"
+                }
+                showAlert = true
+            }
+        }
+    }
+
+    // Fonction pour récupérer l'ID de l'utilisateur via une API
+    private func getUserId(completion: @escaping (String?, Error?) -> Void) {
+        // Remplacez cette partie par un appel réel à votre API pour récupérer l'ID de l'utilisateur
+        let apiUrl = "http://172.18.20.186:3001/profile/id"
+        guard let url = URL(string: apiUrl) else { return }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+      //request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization") // Ajoutez un token d'authentification si nécessaire
+        if let token = UserDefaults.standard.string(forKey: "accessToken") {
+            print("Token récupéré: \(token)")
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        } else {
+            //errorMessage = "Token d'authentification non trouvé."
+           // isLoading = false
+            print("erreur")
+            return
+        }
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(nil, error)
+                return
+            }
+            
+            if let data = data, let userId = try? JSONDecoder().decode(UserIdResponse.self, from: data) {
+                completion(userId.userId, nil)
+            } else {
+                completion(nil, NSError(domain: "API Error", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to decode response"]))
+            }
+        }.resume()
+    }
+}
+
+struct UserIdResponse: Decodable {
+    let userId: String
+}
+
+
+/*
+struct PaymentFormView: View {
+    let product: Product
+    @Binding var isPresented: Bool // Pour contrôler l'affichage de la feuille
+    @State private var cardNumber: String = ""
+    @State private var expirationDate: String = ""
+    @State private var cvc: String = ""
+    @State private var country: String = ""
+    @State private var zipCode: String = ""
+    @State private var isLoading = false
+    @State private var showAlert = false
+    @State private var alertMessage = ""
+    
+    @State private var userId: String? // Remplace par l'ID de l'utilisateur
+    
+    var body: some View {
+        ZStack {
+            Color.white
+                .ignoresSafeArea()
+            
+            VStack(spacing: 20) {
+                // Bouton pour fermer
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        isPresented = false
+                    }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                            .foregroundColor(.gray)
+                    }
+                    .padding()
+                }
+
+                // Titre
+                Text("Buy \(product.name)")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .padding(.top, 10)
+
+                // Image du produit
+                if let imageData = Data(base64Encoded: product.image),
+                   let uiImage = UIImage(data: imageData) {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 120)
+                        .cornerRadius(10)
+                } else if let imageUrl = URL(string: "http://172.18.20.186:3001" + product.image) {
+                    AsyncImage(url: imageUrl) { image in
+                        image
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 120)
+                            .cornerRadius(10)
+                    } placeholder: {
+                        ProgressView()
+                    }
+                } else {
+                    Rectangle()
+                        .fill(Color.gray.opacity(0.3))
+                        .frame(height: 120)
+                        .cornerRadius(10)
+                        .overlay(Text("Image indisponible"))
+                }
+
+                // Formulaire de paiement
+                Form {
+                    Section(header: Text("Order details")) {
+                        Text("Product: \(product.name)")
+                        Text("Price: \(product.price, specifier: "%.2f") TND")
+                    }
+
+                    Section(header: Text("Payment information")) {
+                        TextField("Card Number", text: $cardNumber)
+                            .keyboardType(.numberPad)
+                        TextField("Expiration Date (DD/MM)", text: $expirationDate)
+                            .keyboardType(.numbersAndPunctuation)
+                            .onChange(of: expirationDate) { newValue in
+                                expirationDate = formatDateInput(newValue)
+                            }
+                        SecureField("CVC", text: $cvc)
+                            .keyboardType(.numberPad)
+                        TextField("Country", text: $country)
+                        TextField("ZIP", text: $zipCode)
+                            .keyboardType(.numberPad)
+                    }
+
+                    Button(action: {
+                        // Récupérer l'ID de l'utilisateur avant de créer la commande
+                        getUserId { userId, error in
+                            if let error = error {
+                                alertMessage = "Erreur lors de la récupération de l'ID de l'utilisateur: \(error.localizedDescription)"
+                                showAlert = true
+                            } else if let userId = userId {
+                                self.userId = userId // Sauvegarde de l'ID utilisateur
+                                createOrder(userId: userId
+                                            , productId: product.id) // Appel de la fonction pour créer la commande avec l'ID du produit
+                            }
+                        }
+                    }) {
+                        if isLoading {
+                            ProgressView()
+                        } else {
+                            Text("Pay now")
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.green)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                        }
+                    }
+                    .disabled(isLoading)
+                }
+                .padding(.horizontal)
+                .alert(isPresented: $showAlert) {
+                    Alert(title: Text("Payment Status"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                }
+            }
+        }
+    }
+
+    // Fonction pour formater l'entrée de la date en "DD/MM"
+    private func formatDateInput(_ input: String) -> String {
+        // Supprime tous les caractères non numériques
+        let digits = input.filter { $0.isNumber }
+        
+        var result = ""
+        
+        // Ajoute les séparateurs `/` au bon endroit
+        for (index, digit) in digits.enumerated() {
+            if index == 2 || index == 4 { // Ajoute un `/` après le jour et le mois
+                result.append("/")
+            }
+            result.append(digit)
+            
+            // Limite la longueur à 5 caractères (DD/MM)
+            if result.count == 5 {
+                break
+            }
+        }
+        
+        return result
+    }
+
+    // Fonction pour créer la commande
+    private func createOrder(userId: String, productId: String) {
+        isLoading = true
+
+        let paymentData = CreatePaymentData(
+            cardNumber: cardNumber,
+            expiryDate: expirationDate,
+            cvc: cvc,
+            country: country,
+            zip: zipCode
+        )
+
+        let orderService = OrderService()
+        orderService.createOrder(userId: userId, productId: productId, paymentData: paymentData) { result in
+            DispatchQueue.main.async {
+                isLoading = false
+                switch result {
+                case .success(let response):
+                    alertMessage = "Order created successfully: \(response.id)"
+                case .failure(let error):
+                    alertMessage = "Error: \(error.localizedDescription)"
+                }
+                showAlert = true
+            }
+        }
+    }
+
+    // Fonction pour récupérer l'ID de l'utilisateur via une API
+    private func getUserId(completion: @escaping (String?, Error?) -> Void) {
+        let apiUrl = "http://172.18.20.186:3001/profile/id"
+        guard let url = URL(string: apiUrl) else { return }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        
+        if let token = UserDefaults.standard.string(forKey: "accessToken") {
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        } else {
+            return
+        }
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(nil, error)
+                return
+            }
+            
+            if let data = data, let userId = try? JSONDecoder().decode(UserIdResponse.self, from: data) {
+                completion(userId.userId, nil)
+            } else {
+                completion(nil, NSError(domain: "API Error", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to decode response"]))
+            }
+        }.resume()
+    }
+}
+
+struct UserIdResponse: Decodable {
+    let userId: String
+}
+*/
 class ProductViewModel: ObservableObject {
     @Published var products: [Product] = []
     func fetchProducts() {
@@ -283,6 +906,9 @@ class ProductViewModel: ObservableObject {
 struct ProductListView: View {
     @StateObject private var viewModel = ProductViewModel()
     private let baseURL = "http://172.18.20.186:3001"
+    @State private var selectedProduct: Product? // Produit sélectionné pour le paiement
+       @State private var isPaymentSheetPresented = false // Contrôle de l'affichage de la feuille
+
 
     let columns = [
         GridItem(.flexible(), spacing: 10),
@@ -335,10 +961,21 @@ struct ProductListView: View {
                                 .frame(width: cardWidth, alignment: .leading)
                            
                             // Prix
-                            Text("Prix : \(product.price, specifier: "%.2f") €")
+                            Text("Prix : \(product.price, specifier: "%.2f") TND")
                                 .font(.body)
                                 .foregroundColor(.green)
                                 .frame(width: cardWidth, alignment: .leading)
+                            Button(action: {
+                                                           selectedProduct = product
+                                                           isPaymentSheetPresented = true
+                                                       }) {
+                                                           Text("Acheter")
+                                                               .frame(width: cardWidth - 20, height: 40)
+                                                               .background(Color.green)
+                                                               .foregroundColor(.white)
+                                                               .cornerRadius(8)
+                                                               .padding(.top, 5)
+                                                       }
                         }
                         .padding()
                         .background(Color.white)
@@ -352,6 +989,11 @@ struct ProductListView: View {
             .onAppear {
                 viewModel.fetchProducts()
             }
+            .sheet(isPresented: $isPaymentSheetPresented) {
+                           if let product = selectedProduct {
+                               PaymentFormView(product: product, isPresented: $isPaymentSheetPresented)
+                           }
+                       }
         }
     }
 }

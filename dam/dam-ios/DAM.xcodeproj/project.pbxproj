@@ -18,6 +18,8 @@
 		1319BAA22CDC170200985AB8 /* SignupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1319BAA12CDC170200985AB8 /* SignupViewController.swift */; };
 		1319BAA42CDC17FF00985AB8 /* ResetPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1319BAA32CDC17FF00985AB8 /* ResetPViewController.swift */; };
 		B0100C2D2D0B265000897F16 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0100C2C2D0B265000897F16 /* HistoryView.swift */; };
+		B03782232D11BF3000E3B606 /* payment.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03782222D11BF3000E3B606 /* payment.swift */; };
+		B03782252D11BF5E00E3B606 /* OrderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03782242D11BF5E00E3B606 /* OrderService.swift */; };
 		B049050E2CE25294000A9489 /* RecupCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B049050D2CE25294000A9489 /* RecupCodeViewController.swift */; };
 		B08923DA2D085EC800D55B35 /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = B08923D92D085EC800D55B35 /* Product.swift */; };
 		B0AB27382CE351C900F80455 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0AB27372CE351C900F80455 /* HomeViewController.swift */; };
@@ -47,6 +49,8 @@
 		1319BAA12CDC170200985AB8 /* SignupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupViewController.swift; sourceTree = "<group>"; };
 		1319BAA32CDC17FF00985AB8 /* ResetPViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPViewController.swift; sourceTree = "<group>"; };
 		B0100C2C2D0B265000897F16 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		B03782222D11BF3000E3B606 /* payment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = payment.swift; sourceTree = "<group>"; };
+		B03782242D11BF5E00E3B606 /* OrderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderService.swift; sourceTree = "<group>"; };
 		B049050D2CE25294000A9489 /* RecupCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RecupCodeViewController.swift; path = ../RecupCodeViewController.swift; sourceTree = "<group>"; };
 		B08923D92D085EC800D55B35 /* Product.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
 		B0AB27372CE351C900F80455 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -93,6 +97,8 @@
 			isa = PBXGroup;
 			children = (
 				1319BA882CDBBFD200985AB8 /* AppDelegate.swift */,
+				B03782222D11BF3000E3B606 /* payment.swift */,
+				B03782242D11BF5E00E3B606 /* OrderService.swift */,
 				B0AB273D2CE3886F00F80455 /* ImagePickerViewController.swift */,
 				B0CA71A22CF87BC20044718E /* VerifSignViewController.swift */,
 				1319BA8A2CDBBFD200985AB8 /* SceneDelegate.swift */,
@@ -192,6 +198,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B03782232D11BF3000E3B606 /* payment.swift in Sources */,
 				B0CF5B872CDD3C9A00F62740 /* ForgetPSViewController.swift in Sources */,
 				B0D679752CF7BB160019D332 /* EditProfileView.swift in Sources */,
 				1319BAA22CDC170200985AB8 /* SignupViewController.swift in Sources */,
@@ -210,6 +217,7 @@
 				1319BAA42CDC17FF00985AB8 /* ResetPViewController.swift in Sources */,
 				1319BAA02CDC0AFF00985AB8 /* LoginViewController.swift in Sources */,
 				B0CA71A32CF87BC20044718E /* VerifSignViewController.swift in Sources */,
+				B03782252D11BF5E00E3B606 /* OrderService.swift in Sources */,
 				1319BA8B2CDBBFD200985AB8 /* SceneDelegate.swift in Sources */,
 				B0AB273A2CE3537B00F80455 /* CustomTabBarView.swift in Sources */,
 				B08923DA2D085EC800D55B35 /* Product.swift in Sources */,
