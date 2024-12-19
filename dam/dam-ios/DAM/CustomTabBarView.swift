@@ -6,11 +6,18 @@ struct CustomTabBarView: View {
     
     var body: some View {
         TabView {
-            Text("Accueil")
+            NavigationView {
+                DoctorAIView()
+            }
+            .tabItem {
+                Image(systemName: "house")
+                Text("Home")
+            }
+          /*  Text("Accueil")
                 .tabItem {
                     Image(systemName: "house")
                     Text("Home")
-                }
+                }*/
             ProductListView()
                 .tabItem {
                     Image(systemName: "cart")
@@ -42,7 +49,278 @@ struct CustomTabBarView: View {
         .accentColor(.blue)
     }
 }
+struct ProfileControllerView: View {
+    @State private var userProfile: User?
+    @State private var isLoading = true
+    @State private var hasError = false
+    @Binding var isLoggedOut: Bool
+    @State private var isDarkMode = false
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode> // Fix for dismissal
+    @Environment(\.colorScheme) var colorScheme // Environment to detect current mode
+    @State private var showSettings = false // New state to control settings view
+    
+    var body: some View {
+      
+                ZStack {
+                    VStack {
+                        if isLoading {
+                            ProgressView("Chargement...")
+                                .progressViewStyle(CircularProgressViewStyle(tint: .blue))
+                                .padding()
+                        } else if hasError {
+                            Text("Impossible de charger le profil utilisateur.")
+                                .foregroundColor(.red)
+                                .padding()
+                        } else if let profile = userProfile {
+                            VStack {
+                                Image("user") // Replace with your asset
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 100, height: 100)
+                                    .clipShape(Circle())
+                                    .overlay(Circle().stroke(Color.white, lineWidth: 4))
+                                    .shadow(radius: 5)
 
+                                Text(profile.name ?? "Nom d'utilisateur")
+                                    .font(.title2)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                    .padding(.top, 8)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.green)
+                            
+                            VStack(alignment: .center, spacing: 10) {
+                                ProfileDetailRow(icon: "envelope", text: profile.email ?? "Email non disponible")
+                                ProfileDetailRow(icon: "phone", text: profile.phone ?? "Téléphone non disponible")
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.white)
+                            .cornerRadius(12)
+                            .shadow(radius: 5)
+                            .padding(.horizontal)
+                            
+                            Spacer()
+                        }
+                    }
+
+                    // Settings button in bottom left corner
+                    VStack {
+                        Spacer()
+                        HStack {
+                            Spacer()
+                            Button(action: {
+                                showSettings.toggle()
+                            }) {
+                                Image(systemName: "gearshape.fill")
+                                    .font(.title)
+                                    .foregroundColor(.green)
+                                    .padding()
+                                    .background(Color.white)
+                                    .clipShape(Circle())
+                                    .shadow(radius: 5)
+                            }
+                            .padding(.bottom, 30)
+                            .padding(.trailing, 30)
+                        }
+                    }
+
+                    // Settings modal
+                    if showSettings {
+                        VStack {
+                            Spacer()
+                            VStack(spacing: 20) {
+                                // Navigate to Edit Profile
+                                if let userProfile = userProfile {
+                                    NavigationLink(destination: EditProfileView(user: userProfile)) {
+                                        VStack {
+                                            Text("Edit profil")
+                                                .fontWeight(.bold)
+                                                .foregroundColor(.green)
+                                                .padding()
+                                                .frame(maxWidth: .infinity)
+                                        }
+                                        .background(Color.white)
+                                        .cornerRadius(12)
+                                        .shadow(color: .gray, radius: 5, x: 0, y: 5)
+                                    }
+                                }
+
+                                // Dark Mode toggle button
+                                Button(action: {
+                                    isDarkMode.toggle()
+                                    if isDarkMode {
+                                        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                                            windowScene.windows.first?.overrideUserInterfaceStyle = .dark
+                                        }
+                                    } else {
+                                        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                                            windowScene.windows.first?.overrideUserInterfaceStyle = .light
+                                        }
+                                    }
+                                }) {
+                                    VStack {
+                                        Text(isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode")
+                                            .fontWeight(.bold)
+                                            .foregroundColor(isDarkMode ? .green : .black)
+                                            .padding()
+                                            .frame(maxWidth: .infinity)
+                                    }
+                                    .background(Color.white)
+                                    .cornerRadius(12)
+                                    .shadow(color: .gray, radius: 5, x: 0, y: 5)
+                                }
+
+                                // Log Out button
+                                Button(action: {
+                                    UserDefaults.standard.removeObject(forKey: "accessToken")
+                                    UserDefaults.standard.removeObject(forKey: "refreshToken")
+                                    isLoggedOut = true
+                                    presentationMode.wrappedValue.dismiss()
+                                }) {
+                                    VStack {
+                                        Text("LOG OUT")
+                                            .fontWeight(.bold)
+                                            .foregroundColor(.red)
+                                            .padding()
+                                            .frame(maxWidth: .infinity)
+                                    }
+                                    .background(Color.white)
+                                    .cornerRadius(12)
+                                    .shadow(color: .gray, radius: 5, x: 0, y: 5)
+                                }
+
+                                // Terms and Conditions link
+                                Text("Terms and Conditions")
+                                    .foregroundColor(.blue)
+                                    .underline()
+                                    .onTapGesture {
+                                        if let url = URL(string: "https://www.freeprivacypolicy.com/live/6bcf6418-363a-4e43-9e76-2a51080fb704") {
+                                            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                                        }
+                                    }
+                                    .padding(.top, 20)
+                            }
+                            .padding()
+                            .background(Color(UIColor.systemGray6))
+                            .cornerRadius(12)
+                            .shadow(radius: 5)
+                            .padding(.horizontal)
+                            .transition(.move(edge: .leading)) // Slide in from the left
+                            .animation(.spring(), value: showSettings)
+                        }
+                        .background(Color.black.opacity(0.5).onTapGesture {
+                            showSettings = false
+                        })
+                    }
+                }
+                .onAppear {
+                    fetchUserProfile()
+                }
+            }
+
+            private func fetchUserProfile() {
+                isLoading = true
+                hasError = false
+                
+                guard let url = URL(string: "http://172.18.20.186:3001/profile") else {
+                    print("URL invalide.")
+                    hasError = true
+                    isLoading = false
+                    return
+                }
+                
+                var request = URLRequest(url: url)
+                request.httpMethod = "GET"
+                
+                if let token = UserDefaults.standard.string(forKey: "accessToken") {
+                    request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+                }
+                
+                URLSession.shared.dataTask(with: request) { data, response, error in
+                    DispatchQueue.main.async {
+                        isLoading = false
+                    }
+                    
+                    if let error = error {
+                        print("Erreur lors de la requête : \(error.localizedDescription)")
+                        DispatchQueue.main.async {
+                            hasError = true
+                        }
+                        return
+                    }
+                    
+                    guard let data = data else {
+                        print("Aucune donnée reçue.")
+                        DispatchQueue.main.async {
+                            hasError = true
+                        }
+                        return
+                    }
+                    
+                    if let responseString = String(data: data, encoding: .utf8) {
+                        print("Réponse brute de l'API : \(responseString)")
+                    }
+                    
+                    if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
+                        print("Erreur: Statut HTTP non 200. Code : \(httpResponse.statusCode)")
+                        DispatchQueue.main.async {
+                            hasError = true
+                        }
+                        return
+                    }
+                    
+                    do {
+                        let decodedProfile = try JSONDecoder().decode(User.self, from: data)
+                        DispatchQueue.main.async {
+                            self.userProfile = decodedProfile
+                        }
+                    } catch {
+                        print("Erreur de déchiffrement JSON : \(error.localizedDescription)")
+                        DispatchQueue.main.async {
+                            hasError = true
+                        }
+                    }
+                }.resume()
+            }
+        }
+
+struct ProfileDetailRow: View {
+    let icon: String
+    let text: String
+
+    var body: some View {
+        HStack {
+            Image(systemName: icon)
+                .foregroundColor(.green)
+                .frame(width: 24, height: 24)
+            Text(text)
+                .foregroundColor(.black)
+                .padding(.leading, 5)
+            Spacer()
+        }
+        .frame(maxWidth: .infinity, alignment: .center)
+        .padding(.vertical, 5)
+    }
+}
+
+struct SettingsView: View {
+    var body: some View {
+        VStack {
+            Text("Settings View")
+                .font(.largeTitle)
+                .padding()
+            Spacer()
+        }
+        .padding()
+        .background(Color.white)
+        .cornerRadius(12)
+        .shadow(radius: 10)
+    }
+}
+/*
 struct ProfileControllerView: View {
     @State private var userProfile: User?
     @State private var isLoading = true
@@ -258,6 +536,7 @@ struct ProfileDetailRow: View {
         .padding(.vertical, 5)
     }
 }
+ */
 /*
 struct PaymentFormView: View {
     let product: Product
@@ -907,12 +1186,11 @@ struct ProductListView: View {
     @StateObject private var viewModel = ProductViewModel()
     private let baseURL = "http://172.18.20.186:3001"
     @State private var selectedProduct: Product? // Produit sélectionné pour le paiement
-       @State private var isPaymentSheetPresented = false // Contrôle de l'affichage de la feuille
-
+    @State private var isPaymentSheetPresented = false // Contrôle de l'affichage de la feuille
 
     let columns = [
-        GridItem(.flexible(), spacing: 10),
-        GridItem(.flexible(), spacing: 10)
+        GridItem(.flexible(), spacing: 15),
+        GridItem(.flexible(), spacing: 15)
     ]
    
     let cardHeight: CGFloat = 230 // Hauteur fixe des cartes
@@ -941,7 +1219,7 @@ struct ProductListView: View {
                                     image
                                         .resizable()
                                         .scaledToFit() // Maintenir le ratio d'aspect
-                                        .frame(width: cardWidth, height: 130) // Limiter la hauteur
+                                        .frame(width: cardWidth, height: 90) // Limiter la hauteur
                                         .clipped()
                                 } placeholder: {
                                     ProgressView()
@@ -965,35 +1243,39 @@ struct ProductListView: View {
                                 .font(.body)
                                 .foregroundColor(.green)
                                 .frame(width: cardWidth, alignment: .leading)
+                            
                             Button(action: {
-                                                           selectedProduct = product
-                                                           isPaymentSheetPresented = true
-                                                       }) {
-                                                           Text("Acheter")
-                                                               .frame(width: cardWidth - 20, height: 40)
-                                                               .background(Color.green)
-                                                               .foregroundColor(.white)
-                                                               .cornerRadius(8)
-                                                               .padding(.top, 5)
-                                                       }
+                                selectedProduct = product
+                                isPaymentSheetPresented = true
+                            }) {
+                                Text("Buy")
+                                    .frame(width: cardWidth - 20, height: 40)
+                                    .background(Color.green)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(8)
+                                    .padding(.top, 5)
+                            }
                         }
-                        .padding()
+                        .padding([.leading, .trailing], spacing) // Espacement horizontal sur chaque carte
+                        .padding([.top, .bottom], spacing) // Espacement vertical sur chaque carte
                         .background(Color.white)
                         .cornerRadius(10)
                         .shadow(radius: 5)
                         .frame(width: cardWidth, height: cardHeight) // Fixer la taille des cartes
                     }
                 }
-                .padding(spacing) // Espacement général autour de la grille
+                .padding(.horizontal, spacing) // Espacement horizontal autour de la grille
+                .padding(.top, spacing) // Espacement en haut de la grille
+                .padding(.bottom, spacing) // Espacement en bas de la grille
             }
             .onAppear {
                 viewModel.fetchProducts()
             }
             .sheet(isPresented: $isPaymentSheetPresented) {
-                           if let product = selectedProduct {
-                               PaymentFormView(product: product, isPresented: $isPaymentSheetPresented)
-                           }
-                       }
+                if let product = selectedProduct {
+                    PaymentFormView(product: product, isPresented: $isPaymentSheetPresented)
+                }
+            }
         }
     }
 }

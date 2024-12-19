@@ -27,6 +27,9 @@
 		B0AB273C2CE3658400F80455 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0AB273B2CE3658400F80455 /* ProfileViewController.swift */; };
 		B0AB273E2CE3886F00F80455 /* ImagePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0AB273D2CE3886F00F80455 /* ImagePickerViewController.swift */; };
 		B0AB27402CE38F2B00F80455 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0AB273F2CE38F2B00F80455 /* ContentView.swift */; };
+		B0C110492D131EA800B8E117 /* DoctorAIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C110482D131EA800B8E117 /* DoctorAIView.swift */; };
+		B0C1104B2D131EE300B8E117 /* DoctorAIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C1104A2D131EE300B8E117 /* DoctorAIViewModel.swift */; };
+		B0C1104D2D131F3400B8E117 /* DoctorAIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0C1104C2D131F3400B8E117 /* DoctorAIService.swift */; };
 		B0CA71A32CF87BC20044718E /* VerifSignViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CA71A22CF87BC20044718E /* VerifSignViewController.swift */; };
 		B0CF5B872CDD3C9A00F62740 /* ForgetPSViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CF5B862CDD3C9A00F62740 /* ForgetPSViewController.swift */; };
 		B0D6796F2CF7A2F90019D332 /* VerifLogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D6796E2CF7A2F90019D332 /* VerifLogViewController.swift */; };
@@ -58,6 +61,9 @@
 		B0AB273B2CE3658400F80455 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		B0AB273D2CE3886F00F80455 /* ImagePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerViewController.swift; sourceTree = "<group>"; };
 		B0AB273F2CE38F2B00F80455 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		B0C110482D131EA800B8E117 /* DoctorAIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorAIView.swift; sourceTree = "<group>"; };
+		B0C1104A2D131EE300B8E117 /* DoctorAIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorAIViewModel.swift; sourceTree = "<group>"; };
+		B0C1104C2D131F3400B8E117 /* DoctorAIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorAIService.swift; sourceTree = "<group>"; };
 		B0CA71A22CF87BC20044718E /* VerifSignViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifSignViewController.swift; sourceTree = "<group>"; };
 		B0CF5B862CDD3C9A00F62740 /* ForgetPSViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgetPSViewController.swift; sourceTree = "<group>"; };
 		B0D6796E2CF7A2F90019D332 /* VerifLogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifLogViewController.swift; sourceTree = "<group>"; };
@@ -123,6 +129,9 @@
 				B0D679742CF7BB160019D332 /* EditProfileView.swift */,
 				B0D9E8672CFCF717008274F7 /* HistoryItem.swift */,
 				B0100C2C2D0B265000897F16 /* HistoryView.swift */,
+				B0C110482D131EA800B8E117 /* DoctorAIView.swift */,
+				B0C1104A2D131EE300B8E117 /* DoctorAIViewModel.swift */,
+				B0C1104C2D131F3400B8E117 /* DoctorAIService.swift */,
 			);
 			path = DAM;
 			sourceTree = "<group>";
@@ -198,9 +207,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0C1104D2D131F3400B8E117 /* DoctorAIService.swift in Sources */,
 				B03782232D11BF3000E3B606 /* payment.swift in Sources */,
 				B0CF5B872CDD3C9A00F62740 /* ForgetPSViewController.swift in Sources */,
 				B0D679752CF7BB160019D332 /* EditProfileView.swift in Sources */,
+				B0C1104B2D131EE300B8E117 /* DoctorAIViewModel.swift in Sources */,
 				1319BAA22CDC170200985AB8 /* SignupViewController.swift in Sources */,
 				B0AB27402CE38F2B00F80455 /* ContentView.swift in Sources */,
 				1319BA8D2CDBBFD200985AB8 /* ViewController.swift in Sources */,
@@ -219,6 +230,7 @@
 				B0CA71A32CF87BC20044718E /* VerifSignViewController.swift in Sources */,
 				B03782252D11BF5E00E3B606 /* OrderService.swift in Sources */,
 				1319BA8B2CDBBFD200985AB8 /* SceneDelegate.swift in Sources */,
+				B0C110492D131EA800B8E117 /* DoctorAIView.swift in Sources */,
 				B0AB273A2CE3537B00F80455 /* CustomTabBarView.swift in Sources */,
 				B08923DA2D085EC800D55B35 /* Product.swift in Sources */,
 			);
